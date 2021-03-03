@@ -19,7 +19,6 @@ class UserBloc {
     if (event is OnChangeEvent) {
       _userState.onChange(event.value);
     }
-
     _output.add(_userState.username);
   }
 
