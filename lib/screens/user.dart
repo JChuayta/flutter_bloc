@@ -1,4 +1,6 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+
 import '../blocs/user/user_bloc.dart';
 import '../blocs/user/user_event.dart';
 import '../blocs/user/user_state.dart';
@@ -10,30 +12,31 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   TextEditingController _textEditingController;
-  UserBloc _userBloc = UserBloc();
 
   @override
   void initState() {
     super.initState();
 
-    _textEditingController = TextEditingController(text: UserState().username);
-    _userBloc.sendEvent.add(GetUsernameEvent());
+    _textEditingController =
+        TextEditingController(text: UserState(null).username);
+    // _userBloc.sendEvent.add(GetUsernameEvent());
   }
 
   @override
   void dispose() {
-    _userBloc.dispose();
+    // _userBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // ignore: close_sinks
+    final UserBloc _userBloc = BlocProvider.of<UserBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: StreamBuilder<String>(
-          stream: _userBloc.userStream,
-          builder: (context, snapshot) {
-            return Text('User - ${snapshot.data}');
+        title: BlocBuilder<UserBloc, UserState>(
+          builder: (_, state) {
+            return Text('User - ${state.username}');
           },
         ),
       ),
@@ -50,7 +53,7 @@ class _UserScreenState extends State<UserScreen> {
             labelText: 'User Name',
           ),
           onChanged: (value) {
-            _userBloc.sendEvent.add(OnChangeEvent(value));
+            _userBloc.add(OnChangeEvent(value));
           },
         ),
       ),

@@ -1,11 +1,11 @@
 import '../../models/item_model.dart';
 
 class CatalogState {
-  List<ItemModel> _catalog = [];
+  final List<ItemModel> _catalog;
 
-  CatalogState._();
-  static CatalogState _instance = CatalogState._();
-  factory CatalogState() => _instance;
+  CatalogState({List<ItemModel> catalog}) : _catalog = catalog ?? [];
+  // static CatalogState _instance = CatalogState._();
+  // factory CatalogState() => _instance;
 
   List<ItemModel> get catalog => _catalog;
 

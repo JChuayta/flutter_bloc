@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../blocs/catalog/catalog_state.dart';
 import '../blocs/catalog/catalog_bloc.dart';
 import '../blocs/catalog/catalog_event.dart';
 import '../models/item_model.dart';
@@ -12,22 +15,23 @@ class CatalogScreen extends StatefulWidget {
 }
 
 class _CatalogScreenState extends State<CatalogScreen> {
-  CatalogBloc _catalogBloc = CatalogBloc();
-
   @override
   void initState() {
     super.initState();
-    _catalogBloc.sendEvent.add(GetCatalogEvent());
+    // _catalogBloc.sendEvent.add(GetCatalogEvent());
   }
 
   @override
   void dispose() {
-    _catalogBloc.dispose();
+    // _catalogBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // ignore: close_sinks
+    final CatalogBloc _catalogBloc = BlocProvider.of<CatalogBloc>(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -49,12 +53,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
                   top: -10,
                   child: CircleAvatar(
                     backgroundColor: Colors.amberAccent,
-                    child: StreamBuilder<List<ItemModel>>(
-                      initialData: [],
-                      stream: _catalogBloc.catalogStream,
-                      builder: (context, snapshot) {
+                    child: BlocBuilder<CatalogBloc, CatalogState>(
+                      builder: (_, state) {
                         return Text(
-                          '${snapshot.data.length}',
+                          '${state.catalog.length}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14.0,
@@ -149,11 +151,11 @@ class _ListViewWidgetState extends State<ListViewWidget> {
                   ),
             onPressed: () {
               if (items[index].addedToCart) {
-                widget._catalogBloc.sendEvent.add(
+                widget._catalogBloc.add(
                   RemoveCatalogItemEvent(items[index]),
                 );
               } else {
-                widget._catalogBloc.sendEvent.add(
+                widget._catalogBloc.add(
                   AddCatalogItemEvent(items[index]),
                 );
               }
