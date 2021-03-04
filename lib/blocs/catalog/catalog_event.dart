@@ -1,4 +1,4 @@
-import 'package:example_bloc_app/models/item_model.dart';
+import '../../models/item_model.dart';
 
 abstract class CatalogEvent {}
 

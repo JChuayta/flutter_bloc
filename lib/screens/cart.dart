@@ -1,10 +1,11 @@
-import 'package:example_bloc_app/blocs/catalog/catalog_event.dart';
-import 'package:example_bloc_app/models/item_model.dart';
-import 'package:example_bloc_app/utils/format_total.dart';
 import 'package:flutter/material.dart';
-import 'package:example_bloc_app/blocs/catalog/catalog_bloc.dart';
-import 'package:example_bloc_app/blocs/user/user_bloc.dart';
-import 'package:example_bloc_app/utils/get_initials.dart';
+import '../blocs/catalog/catalog_bloc.dart';
+import '../blocs/catalog/catalog_event.dart';
+import '../blocs/user/user_bloc.dart';
+import '../blocs/user/user_event.dart';
+import '../models/item_model.dart';
+import '../utils/format_total.dart';
+import '../utils/get_initials.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -86,6 +87,13 @@ class _CartScreenState extends State<CartScreen> {
                 Column(
                   children: [
                     SizedBox(height: 20.0),
+                    Text(
+                      'Total',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     StreamBuilder<List<ItemModel>>(
                       initialData: [],
                       stream: _catalogBloc.catalogStream,
@@ -98,13 +106,6 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         );
                       },
-                    ),
-                    Text(
-                      '\$00.00',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
                     ),
                     SizedBox(height: 30.0)
                   ],

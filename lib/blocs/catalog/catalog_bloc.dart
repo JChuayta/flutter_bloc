@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:example_bloc_app/blocs/catalog/catalog_event.dart';
-import 'package:example_bloc_app/blocs/catalog/catalog_state.dart';
-import 'package:example_bloc_app/models/item_model.dart';
+import 'catalog_event.dart';
+import 'catalog_state.dart';
+import '../../models/item_model.dart';
 
 class CatalogBloc {
   CatalogState _catalogState = CatalogState();

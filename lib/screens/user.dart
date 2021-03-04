@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:example_bloc_app/blocs/user/user_bloc.dart';
+import '../blocs/user/user_bloc.dart';
+import '../blocs/user/user_event.dart';
+import '../blocs/user/user_state.dart';
 
 class UserScreen extends StatefulWidget {
   @override
@@ -29,10 +31,11 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
       appBar: AppBar(
         title: StreamBuilder<String>(
-            stream: _userBloc.userStream,
-            builder: (context, snapshot) {
-              return Text('User - ${snapshot.data}');
-            }),
+          stream: _userBloc.userStream,
+          builder: (context, snapshot) {
+            return Text('User - ${snapshot.data}');
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

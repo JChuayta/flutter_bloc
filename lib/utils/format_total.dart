@@ -1,4 +1,4 @@
-import 'package:example_bloc_app/models/item_model.dart';
+import '../models/item_model.dart';
 
 String formatTotal(List<ItemModel> list) {
   return list.length > 0

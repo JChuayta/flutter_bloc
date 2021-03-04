@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import '../blocs/catalog/catalog_bloc.dart';
+import '../blocs/catalog/catalog_event.dart';
+import '../models/item_model.dart';
 
-import 'package:example_bloc_app/blocs/catalog/catalog_event.dart';
-import 'package:example_bloc_app/blocs/catalog/catalog_bloc.dart';
-import 'package:example_bloc_app/models/item_model.dart';
-import 'package:example_bloc_app/utils/hex_to_color.dart';
-import 'package:example_bloc_app/items/items.dart' as sampleData;
+import '../utils/hex_to_color.dart';
+import '../items/items.dart' as sampleData;
 
 class CatalogScreen extends StatefulWidget {
   @override
@@ -13,6 +13,7 @@ class CatalogScreen extends StatefulWidget {
 
 class _CatalogScreenState extends State<CatalogScreen> {
   CatalogBloc _catalogBloc = CatalogBloc();
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +48,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                   right: -10,
                   top: -10,
                   child: CircleAvatar(
+                    backgroundColor: Colors.amberAccent,
                     child: StreamBuilder<List<ItemModel>>(
                       initialData: [],
                       stream: _catalogBloc.catalogStream,
@@ -60,6 +62,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                         );
                       },
                     ),
+                    radius: 10.0,
                   ),
                 ),
               ],
@@ -71,15 +74,16 @@ class _CatalogScreenState extends State<CatalogScreen> {
         ],
       ),
       body: Center(
-        child: ListViewWidget(catalogBloc: _catalogBloc),
+        child: ListViewWidget(_catalogBloc),
       ),
     );
   }
 }
 
 class ListViewWidget extends StatefulWidget {
-  final CatalogBloc catalogBloc;
-  ListViewWidget({this.catalogBloc});
+  final CatalogBloc _catalogBloc;
+
+  const ListViewWidget(this._catalogBloc);
 
   @override
   _ListViewWidgetState createState() => _ListViewWidgetState();
@@ -87,9 +91,11 @@ class ListViewWidget extends StatefulWidget {
 
 class _ListViewWidgetState extends State<ListViewWidget> {
   List<ItemModel> items = [];
+
   @override
   void initState() {
     super.initState();
+
     sampleData.listItems.forEach(
       (element) => items.add(
         ItemModel(
@@ -143,14 +149,18 @@ class _ListViewWidgetState extends State<ListViewWidget> {
                   ),
             onPressed: () {
               if (items[index].addedToCart) {
-                widget.catalogBloc.sendEvent.add(
+                widget._catalogBloc.sendEvent.add(
                   RemoveCatalogItemEvent(items[index]),
                 );
               } else {
-                widget.catalogBloc.sendEvent.add(
+                widget._catalogBloc.sendEvent.add(
                   AddCatalogItemEvent(items[index]),
                 );
               }
+
+              setState(() {
+                items[index].toggleAdded();
+              });
             },
           ),
         ),
