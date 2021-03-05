@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:rxdart/rxdart.dart';
 
 import 'catalog_event.dart';
 import 'catalog_state.dart';
@@ -7,16 +8,19 @@ import '../../models/item_model.dart';
 class CatalogBloc {
   CatalogState _catalogState = CatalogState();
 
-  StreamController<CatalogEvent> _input = StreamController();
-  StreamController<List<ItemModel>> _output =
-      StreamController<List<ItemModel>>.broadcast();
+  final _input = BehaviorSubject<CatalogEvent>();
+  final _output = BehaviorSubject<List<ItemModel>>();
 
   StreamSink<CatalogEvent> get sendEvent => _input.sink;
   Stream<List<ItemModel>> get catalogStream => _output.stream;
 
   CatalogBloc() {
-    _input.stream.listen(_onEvent);
+    _input.listen(_onEvent);
   }
+
+// // Insertar valores al Stream
+//   Function(String) get changeEmail => _emailController.sink.add;
+//   Function(String) get changePassword => _passwordController.sink.add;
 
   void _onEvent(CatalogEvent event) {
     if (event is AddCatalogItemEvent) {
@@ -29,7 +33,11 @@ class CatalogBloc {
   }
 
   void dispose() {
-    _input.close();
-    _output.close();
+    _input?.close();
+    _output?.close();
   }
+
+  // // Obtener el último valor ingresado a los streams
+  // String get email => _emailController.value;
+  // String get password => _passwordController.value;
 }
